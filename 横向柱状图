@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>饼图demo</title>
+
+</head>
+
+<body>
+	<div id="phoneBand" style="width:330px; height:250px;margin: 5px auto;"></div>
+	 		<script type="text/javascript" src="js/echarts.min .js"></script>
+			<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+		function mallPhone(){
+			var phoneBand = echarts.init(document.getElementById('phoneBand'));
+					option = {
+		    title: {
+		        text: '手机品牌分布',
+		        subtext: '丰台万达'
+		    },
+		    tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {
+		            type: 'shadow'
+		        }
+		    },
+		    legend: {
+		        data: ['2017年9月6日']
+		    },
+		    grid: {
+		        left: '6%',
+		        right: '6%',
+		        bottom: '1%',
+		        containLabel: true
+		    },
+		    xAxis: {
+		        type: 'value',
+		        boundaryGap: [0, 0.01]
+		    },
+		    yAxis: {
+		        type: 'category',
+		        data: ['Apple','Samsung','Xiaomi','HTC','HUAWEI','OPPO','VIVO','Sony']
+		    },
+		    series: [
+		        {
+		            name: '2017年9月6日',
+		            type: 'bar',
+		            data: [113, 22,34, 52, 152, 35,40,3]
+		        }
+		    ]
+		};
+		var phoneBand = echarts.init(document.getElementById('phoneBand'));  
+			 phoneBand.setOption(option, true);   //为echarts对象加载数据		
+			 window.addEventListener("resize",function(){
+			phoneBand.resize();						    	
+		});	
+	}
+	mallPhone();
+		</script>
+	 		
+	 	</div>
+	
+</body>
+
+</html>
