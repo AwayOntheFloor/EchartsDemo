@@ -1,16 +1,19 @@
-<--饼图-->
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8"> 
 <title>饼图demo</title>
-<script src="js/echarts.min.js"></script>
+
 </head>
 
 <body>
-	<div id="radar" style="width:330px; height:250px;margin: 5px auto;"></div>
-	<script type="text/javascript">
-		option = {
+	<div id="myChart" style="width:330px; height:250px;margin: 5px auto;"></div>
+	 		<script type="text/javascript" src="js/echarts.min .js"></script>
+			<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('myChart'));
+
+			option = {
 	    title : {
 	        text: '某站点用户访问来源',
 	        subtext: '子标题',
@@ -49,12 +52,19 @@
 	        }
 	    ]
 	};
-		var myChart = echarts.init(document.getElementById('radar'));  
-			  myChart.setOption(option, true);   //为echarts对象加载数据		
-			  window.addEventListener("resize",function(){
-				myChart.resize();						    	
-		});	
-	</script>
+			
+			clearInterval(timeTicket);
+			var timeTicket = setInterval(function () {
+			    option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+			    myChart.setOption(option, true);
+			},1000);
+			
+			// 使用刚指定的配置项和数据显示图表。
+			//myChart.setOption(option);
+			</script>
+	 		
+	 	</div>
+	
 </body>
 
 </html>
