@@ -1,0 +1,29 @@
+/*
+*本Demo以某个地图为背景，在上面显示打点位置。
+*不定时更新一些canvas用法
+*/
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="utf-8">
+</head>
+<body>
+
+<div style="background-image: url(http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg);background-repeat:no-repeat;">
+	<canvas id="myCanvas" width="250" height="300">
+	</canvas>	
+</div>
+
+<script>
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+var img=new Image();
+img.src="black.png";
+img.onload=function(){
+	ctx.drawImage(img,100,100);
+};
+
+</script>
+
+</body>
+</html>
