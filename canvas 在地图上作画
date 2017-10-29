@@ -1,0 +1,12 @@
+通常，以一张图片为背景，你可以：
+首先定义一个div，然后为div设置一个背景图，然后canvas包含在图片中。但是这样往往会出现第一次加载，，canvas画的内容出现了，但是地图却没加载。我们利用<img src>在dom渲染时候要加载完img才能继续的特性，先在dom加载img，然后设置display=none，这样，就不会出现第一次加载没有地图的情况。以下为两者代码对比：
+1.
+<div id="devicePosMap" v-bind:style="{ width:deviceLocMapWidth+'px', height:deviceLocMapHeight+'px'}" style="margin-left:200px;background-image: url(http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg);background-repeat:no-repeat;">
+       <canvas id="devicePosCanvas" width="1000" height="400" style="overflow:hidden"></canvas>
+</div>
+2.<img id="map" src="http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg" style="display:none">
+<div id="devicePosMap" v-bind:style="{ width:deviceLocMapWidth+'px', height:deviceLocMapHeight+'px'}" style="margin-left:200px;background-image: url(http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg);background-repeat:no-repeat;">
+       <canvas id="devicePosCanvas" width="1000" height="400" style="overflow:hidden"></canvas>
+</div>
+
+总之 ，主要思想就是利用img加载完后，dom才继续的特点。
