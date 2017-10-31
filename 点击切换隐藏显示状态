@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+			<script src="js/jquery-1.11.1.min.js"></script>
+		<style>
+			.dimHide{
+				display: none;
+			}
+			.dimShow{
+				display: inline;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<span id="dimDate">Something you don't like<button href="" onclick="hideDate()">>></button></span>
+			<span id="dimRadio" onchange="radioSelected()" style="display: none;">
+				<button href="" onclick="hideRatio()"><<</button>
+				<label><input name="dimension" type="radio" value="day" checked="ture"/>每日 </label>
+				<label><input name="dimension" type="radio" value="all"/>总体 </label>
+			</span>
+		</div>
+	</body>
+	<script>
+		function radioSelected(){
+			var dim = $("input[name='dimension']:checked").val();
+			console.log(dim);
+		}
+		function hideDate(){
+			$("#dimRadio").show(1000);
+			$("#dimDate").hide(1000);
+		}
+		function hideRatio(){
+			$("#dimRadio").hide(1000);
+			$("#dimDate").show(1000);
+		}
+	</script>
+</html>
+
