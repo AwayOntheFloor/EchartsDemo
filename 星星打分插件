@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>要用到的图片：</p>
+<img src="http://hdz.powerlbs.com/haidizhen-lbsshow-test/resources/img/star/stars2.png" id="starFill" />
+<img src="http://hdz.powerlbs.com/haidizhen-lbsshow-test/resources/img/star/stark2.png" id="starEmpty" />
+<p>Canvas:</p>
+<div style="width:150px;height:25px; background-image: url(http://hdz.powerlbs.com/haidizhen-lbsshow-test/resources/img/star/stark2.png);background-repeat:repeat-x;">
+	<canvas id="myCanvasFill" width="110" height="25">
+		Your browser does not support the HTML5 canvas tag.
+	</canvas>
+	</div>
+<script type="text/javascript">
+function draw(id,imgId){
+	var c=document.getElementById(id);
+	var ctx=c.getContext("2d");
+	ctx.clearRect(0,0,c.width,c.height); 
+	var img=document.getElementById(imgId)
+	var pat=ctx.createPattern(img,'repeat-x');
+	ctx.rect(0,0,150,100);
+	ctx.fillStyle=pat;
+	ctx.fill();
+}
+	draw("myCanvasFill","starFill")
+</script>
+
+</body>
+</html>
