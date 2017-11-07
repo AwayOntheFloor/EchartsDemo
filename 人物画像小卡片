@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>  
+<html>
+	<head>
+	    <meta charset="utf-8">
+	    <style>
+	   .customerInformation{
+	    	border:groove;
+	    	height: 240px;
+	    	width: 95%;
+	    	margin: 5px;;
+	    	border-color: rgba(220, 164, 0, 0.64);
+	    }
+	  	.fontStyle{
+	  		text-align:left;
+	  		font-family:"微软雅黑";
+	  		font-size: large;
+	  		color:lightslategray;
+	  		margin:5px ;
+	  	}
+	    </style>
+	</head>
+	<body>
+		<div id="customerInformation" class="customerInformation">
+					<img src="${pageContext.request.contextPath}/resources/img/star/stars2.png" id="starFill" style="display:none"/>
+					<img src="${pageContext.request.contextPath}/resources/img/star/stark2.png" id="starEmpty" style="display:none"/>
+					<div style="height:10%;">
+						<span class="fontStyle" style="float:left;">顾客：<b id="customerMac">'+macId+'</b></span>
+					</div>
+					
+					<div style="width: 100%;height:80%;" >	
+				<div style="margin-top:10px; height: 4px;width: 50%;background:lightgrey;border-radius:5px;border:groove;border-color: rgba(0,0,0,0);"></div>
+				<div style="height: 90%;width: 20%;float: left;">
+					<img id="customerGender" src="${pageContext.request.contextPath}/resources/img/unknow.png" width="100%" style="margin-top: 30px;"/>
+				</div>
+				<div id="customerInfo" style="height: 90%;width: 70%;float:right;">
+					<div class="fontStyle" style="margin:0px;display:block;">age：<span id="customerAge">未知</span><br></div>
+					<div class="fontStyle" style="margin: 0px;">亲子指数：<span id="customerSon">0</span></div>
+					<div id="customerSonStar" class="fontStyle">
+						<div style="margin-left: 10px;width:160px;height:25px; background-image:url(${pageContext.request.contextPath}/resources/img/star/stark2.png);background-repeat:repeat-x;">
+							<canvas id="canvasSon" width="112" height="25" style="float:left;">
+								Your browser does not support the HTML5 canvas tag.
+							</canvas>
+						</div>
+					</div>
+					<div class="fontStyle" style="margin: 0px;">消费指数：<span id="customerShoppingRate">0</span></div>
+					<div id="customerShoppingRateStar" class="fontStyle">
+						<div style="margin-left: 10px;width:160px;height:25px; background-image:url(${pageContext.request.contextPath}/resources/img/star/stark2.png);background-repeat:repeat-x;">
+							<canvas id="canvasShoppingRate" width="112" height="25" style="border:dashed;float:left;">
+								Your browser does not support the HTML5 canvas tag.
+							</canvas>
+						</div>
+					</div>
+					<div class="fontStyle" style="margin: 0px;">最喜欢的店铺：<span id="customerFavouriteShop">未知</span></div>
+					<div class="fontStyle" style="margin: 0px;">最喜欢的品牌：<span id="customerFavouriteBand">未知</span></div>
+				</div>
+			</div>
+					
+				</div>
+		<script>  
+			function draw(id){
+				var c=document.getElementById(id);
+				var ctx=c.getContext("2d");
+				ctx.clearRect(0,0,c.width,c.height); 
+				img = new Image();
+				img.src="img/starFill.png";
+				img.onload=function(){var pat=ctx.createPattern(img,'repeat-x');
+				ctx.rect(0,0,150,100);
+				ctx.fillStyle=pat;
+				ctx.fill();}
+			}
+			draw("canvasShoppingRate");
+			draw("canvasSon");
+			function showDetail(mac) {
+				$.("customerMac").innerHTML("mac");
+				$.ajax({
+					type : "POST",
+					url:"http://hdz.powerlbs.com/haidizhen-portrait/userPortrait/"+ mac,
+					dataType : "jsonp",
+					success : function(data) {
+						if(data.data.length>0){
+							if(data.data.gender>=0.5){
+								$("#customerGender").attr('src','img/boy.png'); 
+							}else if(data.data.gender<=0.5){
+								$("#customerGender").attr('src','img/girl.png'); 
+							}
+							var childWidth = 160*data.data.haveBaby;
+							$("#canvasSon").attr('width',childWidth); 
+							var shoppingIndexWidth = 160*data.data.consumptionIndex;
+							$("#canvasShoppingRate").attr('width',shoppingIndexWidth);
+							
+							$("customerAge").innerHTML(data.data.age);
+							$("customerSon").innerHTML(data.data.haveBaby);
+							$("customerShoppingRate").innerHTML(data.data.consumptionIndex);
+							$("customerFavouriteShop").innerHTML(data.data.favouriteShop);
+							$("customerFavouriteBand").innerHTML(data.data.favouriteBrand);
+													
+						}
+				
+					},
+					error : function() {
+						console.log("用户画像获取失败");
+					}
+				});
+			}
+			function hello(){
+				showDetail("24:1f:a0:c1:37:dd");
+			}
+		</script>  
+	</body>
+		<script src="js/jquery-1.11.1.min.js"></script>
+</html>
