@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>电子围栏设定</title>
+</head>
+<body>
+<div id="fenceVue">
+	<span style="float:left;margin-right:20px ;font-size: large;"><strong>围栏设置</strong></span> 
+	<span style="float: left;">
+		<strong>设备名称：</strong><span style="margin-left:30px;">{{currentDeviceName}}</span>
+		<strong>电子围栏名称：</strong><input style="width: 100px;margin-left: 10px;" v-model="fenceName" placeholder="">         
+		<button style="margin-right: 10px;" v-on:click="fenceSubmit">提交围栏</button>
+	</span>
+	<button style="margin-right: 10px;margin-left:30px;" v-on:click="fenceReplot">重绘</button>
+	<button style="margin-right: 10px;" v-on:click="fencePush">生成</button>
+	<div style="height: 500px;overflow: auto;">
+		<img id="map" src="http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg" style="display:none">
+		<div id="fenceMap" v-bind:style="{ width:recordMapWidth+'px', height:recordMapHeight+'px'}" style="background-image: url(http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg);background-repeat:no-repeat;">														
+			<canvas id="fenceCanvas" width="1000" height="400" style="overflow:hidden" v-on:click.left="fenceLine(event)"></canvas>
+		</div>
+	</div>	
+</div>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script>
+    	var fenceVue = new Vue({
+    		el:"#fenceVue",
+    		data:{
+    			myurl:'',
+    			recordMapWidth:700,
+    			recordMapHeight:1000,
+    			fencesSet:[
+    			
+    			],
+    			devicePosX:400,
+    			devicePosY:280,
+    			fencePosLen:0,
+    			fenceName:"",
+    			currentDeviceId:"",
+    			currentDeviceName:" ",
+    			fencePosition:[
+    			
+    			]
+    		},
+    		created :function(){
+    			var img = document.getElementById("map");				
+				this.recordMapHeight=img.height;
+				this.recordMapWidth=img.width;	
+		  	},
+    		methods:{
+    			fenceLine:function(event){
+					fenceVue.fencePosition.push({
+						corX:event.offsetX,
+						corY:event.offsetY
+					})
+    				var canvas = document.getElementById("fenceCanvas");
+    				ctx = canvas.getContext("2d");
+    				ctx.beginPath();
+    				ctx.arc(fenceVue.fencePosition[fenceVue.fencePosLen].corX,fenceVue.fencePosition[fenceVue.fencePosLen].corY,2,0,2*Math.PI);
+    				ctx.fillStyle = "red" ;
+    				ctx.fill();
+    				ctx.closePath();
+    				if(fenceVue.fencePosLen>0){
+    					var x=fenceVue.fencePosition[fenceVue.fencePosLen].corX;
+						var y=fenceVue.fencePosition[fenceVue.fencePosLen].corY;
+						var x2=fenceVue.fencePosition[fenceVue.fencePosLen-1].corX;
+						var y2=fenceVue.fencePosition[fenceVue.fencePosLen-1].corY;
+						ctx.strokeStyle="red";  
+		                ctx.lineWidth=1; 
+		                ctx.beginPath(); 
+		                ctx.moveTo(x2,y2);
+		                ctx.lineTo(x,y); 
+		                ctx.stroke();  
+		                ctx.closePath(); 	
+    				}
+    				fenceVue.fencePosLen++;
+    			},
+    			fenceSubmit:function(){
+    				/*
+    				var fencePosResult="";
+    				var len = fenceVue.fencePosition.length-1;
+    				if(len>=0){
+    					for(var i=0;i<len;i++){
+        					fencePosResult = fencePosResult+fenceVue.fencePosition[i].corX+'/'+fenceVue.fencePosition[i].corY+',';
+        				}
+        					fencePosResult = fencePosResult+fenceVue.fencePosition[len].corX+'/'+fenceVue.fencePosition[len].corY;	
+    				}
+    				var fencePos = {"fenceArea":fencePosResult,"fenceName":fenceVue.fenceName,"deviceId":sessionStorage.deviceId};     		
+    				$.ajax({
+	   			        type: "POST",
+	   			        url: "http://localhost:8080/device-manager/fence/add",
+	   			        data:fencePos,
+	   			        dataType: "json",
+	   			        success: function (data){
+	   			        	var r=confirm("提交成功");
+	   			        	if(r == true){
+	   			        		window.location.href='http://localhost:8080/device-manager/pages/deviceManagement.html';
+	   			        	}
+	   			        },
+	   			        error: function () {
+	   			        	console.log("调用出错")
+	   			        }
+    				});*/
+    			},
+    			fenceReplot:function(){
+    				fenceVue.fencePosition=[];
+    				fenceVue.fencePosLen=0;
+    				var canvas = document.getElementById("fenceCanvas");
+    				canvas.height = canvas.height;
+    				ctx = canvas.getContext("2d");
+    				imgGreen = new Image();
+    				imgGreen.src="../img/green.png";
+    				imgGreen.onload=function(){
+    					var x=fenceVue.devicePosX;
+    					var y=fenceVue.devicePosY;
+    					ctx.drawImage(imgGreen,x-8,y-15);
+    				}	
+    			},
+    			fencePush:function(){
+    				console.log(fenceVue.fencePosition);
+    				if(fenceVue.fencePosition.length!=0){
+    					var canvas = document.getElementById("fenceCanvas");
+	    				ctx = canvas.getContext("2d");
+	    				var x=fenceVue.fencePosition[fenceVue.fencePosLen-1].corX;
+						var y=fenceVue.fencePosition[fenceVue.fencePosLen-1].corY;
+						var x2=fenceVue.fencePosition[0].corX;
+						var y2=fenceVue.fencePosition[0].corY;
+						ctx.strokeStyle="red";  
+		                ctx.lineWidth=1; 
+		                ctx.beginPath(); 
+		                ctx.moveTo(x2,y2)
+		                ctx.lineTo(x,y); 
+		                ctx.stroke();  
+		                ctx.closePath(); 	
+		                fenceVue.fencesSet.push({
+		                	fenceName:"安检口1",
+							pos:fenceVue.fencePosition
+						});
+		                fenceVue.fencePosition=[];
+		                console.log(fenceVue.fencesSet);	
+    				}else{
+    					alert("请点出围栏！");
+    				}
+    			}
+    		}
+    	});
+    	
+    </script>
+</body>
+</html>
