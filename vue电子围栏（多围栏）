@@ -13,7 +13,8 @@
 		<button style="margin-right: 10px;" v-on:click="fenceSubmit">提交围栏</button>
 	</span>
 	<button style="margin-right: 10px;margin-left:30px;" v-on:click="fenceReplot">重绘</button>
-	<button style="margin-right: 10px;" v-on:click="fencePush">生成</button>
+	<button style="margin-right: 10px;" v-on:click="fencePush">生成单个</button>
+	<button style="margin-right: 10px;" v-on:click="showFences">显示全部</button>
 	<div style="height: 500px;overflow: auto;">
 		<img id="map" src="http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg" style="display:none">
 		<div id="fenceMap" v-bind:style="{ width:recordMapWidth+'px', height:recordMapHeight+'px'}" style="background-image: url(http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg);background-repeat:no-repeat;">														
@@ -21,8 +22,8 @@
 		</div>
 	</div>	
 </div>
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../js/vue.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/vue.min.js"></script>
     <script>
     	var fenceVue = new Vue({
     		el:"#fenceVue",
@@ -31,9 +32,12 @@
     			recordMapWidth:700,
     			recordMapHeight:1000,
     			fencesSet:[
-    			
+    				//新画出来未传入后台的围栏数据
     			],
-    			devicePosX:400,
+    			existedFencesSet:[
+					//从后台申请的围栏数据
+    			],
+    			devicePosX:400, 
     			devicePosY:280,
     			fencePosLen:0,
     			fenceName:"",
@@ -49,7 +53,7 @@
 				this.recordMapWidth=img.width;	
 		  	},
     		methods:{
-    			fenceLine:function(event){
+    			fenceLine:function(event){//点击地图画围栏
 					fenceVue.fencePosition.push({
 						corX:event.offsetX,
 						corY:event.offsetY
@@ -66,44 +70,46 @@
 						var y=fenceVue.fencePosition[fenceVue.fencePosLen].corY;
 						var x2=fenceVue.fencePosition[fenceVue.fencePosLen-1].corX;
 						var y2=fenceVue.fencePosition[fenceVue.fencePosLen-1].corY;
-						ctx.strokeStyle="red";  
-		                ctx.lineWidth=1; 
-		                ctx.beginPath(); 
-		                ctx.moveTo(x2,y2);
-		                ctx.lineTo(x,y); 
-		                ctx.stroke();  
-		                ctx.closePath(); 	
+						ctx.strokeStyle="red";
+						ctx.lineWidth=1;
+						ctx.beginPath();
+						ctx.moveTo(x2,y2);
+						ctx.lineTo(x,y);
+		                ctx.stroke();
+		                ctx.closePath();
     				}
     				fenceVue.fencePosLen++;
     			},
-    			fenceSubmit:function(){
-    				/*
+    			fenceSubmit:function(){//将本地图所有的围栏提交
     				var fencePosResult="";
-    				var len = fenceVue.fencePosition.length-1;
-    				if(len>=0){
-    					for(var i=0;i<len;i++){
-        					fencePosResult = fencePosResult+fenceVue.fencePosition[i].corX+'/'+fenceVue.fencePosition[i].corY+',';
-        				}
-        					fencePosResult = fencePosResult+fenceVue.fencePosition[len].corX+'/'+fenceVue.fencePosition[len].corY;	
+    				for(var j=0;j<fenceVue.fencesSet.length;j++){
+    					var temp = fenceVue.fencesSet[j].fenceName+"-";
+    					var len = fenceVue.fencesSet[j].pos.length-1;
+	    				if(len>=0){
+	    					for(var i=0;i<len;i++){
+	        					temp = temp+fenceVue.fencesSet[j].pos[i].corX+'/'+fenceVue.fencesSet[j].pos[i].corY+',';
+	        				}
+	        					temp = temp+fenceVue.fencesSet[j].pos[i].corX+'/'+fenceVue.fencesSet[j].pos[i].corY;
+	    				}
+	    				temp = temp +";";
+	    				fencePosResult = fencePosResult +temp;
     				}
-    				var fencePos = {"fenceArea":fencePosResult,"fenceName":fenceVue.fenceName,"deviceId":sessionStorage.deviceId};     		
-    				$.ajax({
+    				console.log(fencePosResult);
+    				var fencePos = {"fenceArea":fencePosResult,"buildingId":sessionStorage.deviceId}; //封装传给后台的数据    		
+    				$.ajax({//ajax传数据给后台
 	   			        type: "POST",
 	   			        url: "http://localhost:8080/device-manager/fence/add",
 	   			        data:fencePos,
 	   			        dataType: "json",
 	   			        success: function (data){
-	   			        	var r=confirm("提交成功");
-	   			        	if(r == true){
-	   			        		window.location.href='http://localhost:8080/device-manager/pages/deviceManagement.html';
-	   			        	}
+	   			        	alert("提交成功");
 	   			        },
 	   			        error: function () {
 	   			        	console.log("调用出错")
 	   			        }
-    				});*/
+    				});
     			},
-    			fenceReplot:function(){
+    			fenceReplot:function(){//重新画图
     				fenceVue.fencePosition=[];
     				fenceVue.fencePosLen=0;
     				var canvas = document.getElementById("fenceCanvas");
@@ -117,8 +123,69 @@
     					ctx.drawImage(imgGreen,x-8,y-15);
     				}	
     			},
+    			showFences:function(){//显示所有围栏
+    				$.ajax({
+				        type: "POST",
+				        url: "http://localhost:8080/haidizhen-lbsshow-airport/fence/getAll?buildingId=HDZ010115D1C667EE4",
+				        dataType: "json",
+				        success: function (data) { 
+				        	if(data.status=="200"){
+				        		for(var i=0;i<data.data.length;i++){
+				        			fenceVue.existedFencesSet.push({
+					                	fenceId:data.data[i].fenceId,
+										shopId:data.data[i].shopId,
+										fenceArea:data.data[i].fenceArea,
+										fenceName:data.data[i].fenceName
+									});
+				        		}
+				        		var canvas = document.getElementById("fenceCanvas");
+					    		ctx = canvas.getContext("2d");
+			    				for(var i=0;i<fenceVue.existedFencesSet.length;i++){
+			    					var temp = fenceVue.existedFencesSet[i].fenceArea.split(",");
+			    		    		console.log(temp);
+			    					for(var j=0;j<temp.length-1;j++){
+					    				ctx.beginPath();
+					    				ctx.arc(temp[j].split("/")[0],temp[j].split("/")[1],2,0,2*Math.PI);
+					    				ctx.fillStyle = "red" ;
+					    				ctx.fill();
+					    				var x=temp[j].split("/")[0];
+										var y=temp[j].split("/")[1];
+										var x2=temp[j+1].split("/")[0];
+										var y2=temp[j+1].split("/")[1];
+										ctx.strokeStyle="red";
+										ctx.lineWidth=1;
+										ctx.beginPath();
+										ctx.moveTo(x2,y2);
+										ctx.lineTo(x,y);
+						                ctx.stroke();
+						                ctx.closePath();
+			    					}
+			    						ctx.beginPath();
+					    				ctx.arc(temp[temp.length-1].split("/")[0],temp[temp.length-1].split("/")[1],2,0,2*Math.PI);
+					    				ctx.fillStyle = "red" ;
+					    				ctx.fill();
+					    				var x=temp[temp.length-1].split("/")[0];
+										var y=temp[temp.length-1].split("/")[1];
+										var x2=temp[0].split("/")[0];
+										var y2=temp[0].split("/")[1];
+										ctx.strokeStyle="red";
+										ctx.lineWidth=1;
+										ctx.beginPath();
+										ctx.moveTo(x2,y2);
+										ctx.lineTo(x,y);
+						                ctx.stroke();
+						                ctx.closePath();
+			    				}
+				        	}
+				        	
+				        },
+				        error: function () {
+				        	console.log("调用出错")
+				        }
+					})
+    			},
     			fencePush:function(){
-    				console.log(fenceVue.fencePosition);
+    				//画好的单个围栏，push到该地图所有围栏的集合中
     				if(fenceVue.fencePosition.length!=0){
     					var canvas = document.getElementById("fenceCanvas");
 	    				ctx = canvas.getContext("2d");
@@ -134,18 +201,20 @@
 		                ctx.stroke();  
 		                ctx.closePath(); 	
 		                fenceVue.fencesSet.push({
-		                	fenceName:"安检口1",
+		                	fenceName:fenceVue.fenceName, 
 							pos:fenceVue.fencePosition
 						});
-		                fenceVue.fencePosition=[];
-		                console.log(fenceVue.fencesSet);	
+						setTimeout(function(){
+							fenceVue.fencePosition=[];
+			                fenceVue.fencePosLen=0;
+			                canvas.height = canvas.height;
+						},500);
     				}else{
     					alert("请点出围栏！");
     				}
     			}
     		}
     	});
-    	
     </script>
 </body>
 </html>
