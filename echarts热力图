@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<div id="main" style="width: 96%;height: 500px;margin-top: 10px;text-align: center;">
+    <img id="mat_img"  src="http://hdz.powerlbs.com/images/hdzplatform/map/HDZ010115D1C667EE4/F1/map.jpg" style="height: 100%;z-index: -999;opacity:0.7;margin-left: -150px;" />
+    <div id="mat_heat"  style="width:1000px;height:500px;z-index: 999;position: inherit;margin: 0 auto;"></div>
+</div>
+<script src="js/echarts-all.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/vue.min.js"></script>
+<script type="text/javascript">
+	var heatData=[];
+	function loadHeatmap(){
+	    var width=1000;//获取图片的宽度
+	    var height=500;//获取图片的高度
+	    var width1=parseInt(width)+parseInt(150);
+	    var width2=parseInt(width)+parseInt(30);
+		
+	    heatData=[];
+	    for(var i=0;i<20;i++){
+	        heatData.push([
+	            10+Math.random() * 150,
+	            50+Math.random() * 200,
+	            Math.random(),
+	        ]);
+	    }
+	    for(var i=0;i<20;i++){
+	        heatData.push([
+	            150+Math.random() * 100,
+	            200+Math.random() * 200,
+	            Math.random(),
+	        ]);
+	    }
+		//获取echarts容器
+	    var myChart = echarts.init(document.getElementById('mat_heat'));
+	    myChart.clear();
+	    var option = {
+	        title : {
+	            text: ''
+	        },
+			//设置图例
+	        dataRange:{
+	            show: true,
+	            orient: 'vertical',
+	            x:width2,
+	            //y: 'bottom',
+	            precision: 0,
+	            splitNumber: 5,
+	            color: [ 'red','yellow' ,'lime' ,'cyan','blue' ],
+	            selectedMode: false,
+	            min:0,
+	            max:1000
+	        },
+	        series : [
+	            {
+	                type :'heatmap',
+	                data : heatData,
+	                hoverable : false,
+	                minAlpha: 0.02,
+	                valueScale: 1,
+	                opacity: 0.9
+	            }
+	        ]
+	    };
+	    
+	    myChart.setOption(option);
+	}
+	loadHeatmap();
+</script>
+</body>
+</html>
