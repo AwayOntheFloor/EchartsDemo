@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8">
+<head>
+    <style type="text/css">
+    	#floorSlider{
+    		width: 180px;
+    		position:fixed;
+    		top: 35%;
+    		overflow: hidden;
+    	}
+    	#sliderPart{
+    		width: 200px;
+    		height: 400px;
+    		overflow-y: scroll;
+    	}
+    	.floorBlock{
+    		clear: both;
+    		width: 95%;
+    		height: 75px;
+    	}
+    	.floorWords{
+    		
+			width: 70%;    		
+    		height: 75px;
+    		color: gray;
+    		text-align: center;
+    		font-size:xx-large;
+    		line-height: 75px;
+    		float: left;
+    	}
+    	.routeStart{
+    		width: 25%;
+    		height: 30px;
+    		float: left;
+    		background: url(img/start.png);
+    		background-size: 100%;
+    		background-repeat: no-repeat;
+    		margin-top:25px ;
+    	}
+    	.routeEnd{
+    		width: 25%;
+    		height: 30px;
+    		float: left;
+    		background: url(img/end.png);
+    		background-size: 100%;
+    		background-repeat: no-repeat;
+    		margin-top:25px ;
+    	}
+    	.floorWords:hover{
+    		background: royalblue;
+    		color: white;
+    	}
+    	.sliderUp{
+    		
+    		width: 40px;
+    		height: 30px;
+    		background: url(img/up.png);
+    		background-repeat: no-repeat;
+    		margin-left: 50px;
+    	}
+    	.sliderDown{
+    		
+    		width: 40px;
+    		height: 30px;
+    		background: url(img/down.png);
+    		background-repeat: no-repeat;
+    		margin-left: 50px;
+    	}
+    </style>
+</head>
+<body>
+
+<div id="floorSlider">
+<div class="sliderUp"></div>
+	<div id="sliderPart">
+		<div class="floorBlock">
+			<div class="floorWords">F1</div>
+		</div>
+		
+		<div class="floorBlock">
+			<div class="floorWords">F2</div>
+		</div>
+		<div class="floorBlock">
+			<div class="floorWords">F3</div>
+		</div>
+		<div class="floorBlock">
+			<div class="floorWords">F4</div>
+			<div class="routeStart"></div>
+		</div>
+		<div class="floorBlock">
+			<div class="floorWords">F5</div>
+		</div>
+		<div class="floorBlock">
+			<div class="floorWords">F6</div>
+			<div class="routeEnd"></div>
+		</div>
+	</div>
+<div class="sliderDown"></div>
+</div>
+<script type="text/javascript">
+</script>
+</body>
+</html>
