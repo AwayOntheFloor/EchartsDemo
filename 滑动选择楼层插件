@@ -7,21 +7,23 @@
     		width: 180px;
     		position:fixed;
     		top: 35%;
+    		left: 20px;
     		overflow: hidden;
     	}
     	#sliderPart{
     		width: 200px;
-    		height: 400px;
+    		height: 375px;
     		overflow-y: scroll;
     	}
     	.floorBlock{
+    		
     		clear: both;
     		width: 95%;
     		height: 75px;
     	}
     	.floorWords{
     		
-			width: 70%;    		
+			width: 60%;    		
     		height: 75px;
     		color: gray;
     		text-align: center;
@@ -30,6 +32,7 @@
     		float: left;
     	}
     	.routeStart{
+    		
     		width: 25%;
     		height: 30px;
     		float: left;
@@ -39,6 +42,7 @@
     		margin-top:25px ;
     	}
     	.routeEnd{
+    		
     		width: 25%;
     		height: 30px;
     		float: left;
@@ -46,6 +50,16 @@
     		background-size: 100%;
     		background-repeat: no-repeat;
     		margin-top:25px ;
+    	}
+    	.routeSameFloor{
+    		
+    		width: 25%;
+    		height: 60px;
+    		float: left;
+    		background: url(img/sameFloor.png);
+    		background-size: 100%;
+    		background-repeat: no-repeat;
+    		margin-top:5px ;
     	}
     	.floorWords:hover{
     		background: royalblue;
@@ -57,7 +71,7 @@
     		height: 30px;
     		background: url(img/up.png);
     		background-repeat: no-repeat;
-    		margin-left: 50px;
+    		margin-left: 30px;
     	}
     	.sliderDown{
     		
@@ -65,15 +79,17 @@
     		height: 30px;
     		background: url(img/down.png);
     		background-repeat: no-repeat;
-    		margin-left: 50px;
+    		margin-left: 30px;
     	}
     </style>
 </head>
 <body>
 
 <div id="floorSlider">
-<div class="sliderUp"></div>
+
+	<!--<div class="sliderUp"></div>
 	<div id="sliderPart">
+		
 		<div class="floorBlock">
 			<div class="floorWords">F1</div>
 		</div>
@@ -81,24 +97,73 @@
 		<div class="floorBlock">
 			<div class="floorWords">F2</div>
 		</div>
+		
 		<div class="floorBlock">
 			<div class="floorWords">F3</div>
 		</div>
+		
 		<div class="floorBlock">
 			<div class="floorWords">F4</div>
-			<div class="routeStart"></div>
+			<span class="routeStart"></span>
 		</div>
+		
 		<div class="floorBlock">
 			<div class="floorWords">F5</div>
+			<span class="routeSameFloor"></span>
 		</div>
+		
 		<div class="floorBlock">
 			<div class="floorWords">F6</div>
-			<div class="routeEnd"></div>
+			<span class="routeEnd"></span>
 		</div>
+		
 	</div>
-<div class="sliderDown"></div>
+	
+	<div class="sliderDown"></div>-->
+
 </div>
+<script src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
+	function floorIndex(floorArr){
+		var length = floorArr.length;
+		if(length<=5){//5层以内直接画，没有滑动效果
+			for(var i=0;i<length;i++){
+					$("#floorSlider").append(
+						'<div class="floorBlock" id="'+floorArr[i]+'">'+
+							'<div class="floorWords">'+floorArr[i]+'</div>'+
+						'</div>'
+					);
+			}
+		}else{//大于5层有滑动效果
+			$("#floorSlider").append(
+						'<div class="sliderUp"></div>'+
+						'<div id="sliderPart"></div>'
+					);
+			for(var i=0;i<length;i++){
+				$("#sliderPart").append(
+						'<div class="floorBlock" id="'+floorArr[i]+'">'+
+							'<div class="floorWords">'+floorArr[i]+'</div>'+
+						'</div>'
+					);
+			}
+			$("#floorSlider").append('<div class="sliderDown"></div>');
+		}
+	}
+	function floorMark(start,end){//输入起点终点，在相应的楼层右侧做出记号
+		$('#floorSlider span').remove();
+		if(start==end){
+			$("#"+start).append('<span class="routeSameFloor"></span>');
+		}else{
+			$("#"+start).append('<span class="routeStart"></span>');
+			$("#"+end).append('<span class="routeEnd"></span>');
+		}
+		
+	}
+	
+	var floorArr=["F1","F2","F3","F4","F5","F6","F7","F8","F9","B1"];
+	//var floorArr=["F1","F2","F3"];
+	floorIndex(floorArr);
+	floorMark("F2","F1");
 </script>
 </body>
 </html>
