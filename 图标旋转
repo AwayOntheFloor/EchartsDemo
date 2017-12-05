@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style> 
+div
+{
+width:100px;
+height:100px;
+background:blue;
+transition:transform 1s;
+-moz-transition:width 2s; /* Firefox 4 */
+-webkit-transition:width 2s; /* Safari and Chrome */
+-o-transition:width 2s; /* Opera */
+}
+
+div:hover
+{
+/* Rotate div */
+transform:rotate(9deg);
+-ms-transform:rotate(9deg); /* Internet Explorer */
+-moz-transform:rotate(9deg); /* Firefox */
+-webkit-transform:rotate(9deg); /* Safari 和 Chrome */
+-o-transform:rotate(9deg); /* Opera */
+}
+</style>
+</head>
+<body>
+
+<div></div>
+
+<p>请把鼠标指针移动到蓝色的 div 元素上，就可以看到过渡效果。</p>
+
+<p><b>注释：</b>本例在 Internet Explorer 中无效。</p>
+
+</body>
+</html>
