@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+	<style>
+		body{
+			background: #0b0f18;
+		}
+    .Box{
+        position:relative;
+        left:50px;
+        top:50px;
+        margin:10px;
+        width:500px;
+        height:100px;
+        border:1px solid #4b7881;
+    }
+    .boxBorder{
+        position:absolute;
+        padding:2px;
+        border-style: solid;
+        border-color: #7cc8d1;
+    }
+    .row1 {
+        border-width: 2px 0 0 2px;
+        top:-2px;
+        left:-2px;
+    }
+    .row2 {
+        border-width: 2px 2px 0 0;
+        top:-2px;
+        right:-2px;
+    }
+    .col1 {
+        border-width: 0 0 2px 2px;
+        bottom:-2px;
+        left:-2px;
+    }
+    .col2 {
+        border-width: 0 2px 2px 0;
+        bottom:-2px;
+        right:-2px;
+    }
+    .darkblue{
+    	background:#09162f;
+    }
+    .lightblue{
+    	background:#031522;
+    }
+    .net{
+		background-image: linear-gradient(90deg,#0f2230 10%, rgba(0, 0, 0, 0) 10%), 
+			linear-gradient(#0f2230 10%, rgba(0, 0, 0, 0) 10%);
+		background-size: 10px 10px;
+		border: solid;
+		width: 96%;
+		height: 86%;
+		border-color:#0f2230;
+		border-width:1px;
+		margin: 5px auto;
+	}
+	.point{
+      background-image:
+        linear-gradient(#031522 14px,transparent 0),
+        linear-gradient(90deg,darkgray 1px,transparent 0);
+     	background-size:15px 15px,15px 15px;
+		width: 95%;
+		height: 86%; 
+		margin: 5px auto;
+	}
+    </style>
+	
+</head>
+<body>
+	<div class="Box">
+		<span class = "boxBorder row row1"></span>
+		<span class = "boxBorder row row2"></span>
+		<span class = "boxBorder col col2"></span>
+		<span class = "boxBorder col col1"></span>
+	</div>
+	
+	<div class="Box darkblue">
+		<span class = "boxBorder row row1"></span>
+		<span class = "boxBorder row row2"></span>
+		<span class = "boxBorder col col2"></span>
+		<span class = "boxBorder col col1"></span>
+	</div>
+	
+	<div class="Box lightblue">
+		<span class = "boxBorder row row1"></span>
+		<span class = "boxBorder row row2"></span>
+		<span class = "boxBorder col col2"></span>
+		<span class = "boxBorder col col1"></span>
+	</div>
+	
+	<div class="Box">
+		<div class="net">
+			<span class = "boxBorder row row1"></span>
+			<span class = "boxBorder row row2"></span>
+			<span class = "boxBorder col col2"></span>
+			<span class = "boxBorder col col1"></span>
+		</div>
+	</div>
+	
+	<div class="Box lightblue">
+		<div class="point">
+			<span class = "boxBorder row row1"></span>
+			<span class = "boxBorder row row2"></span>
+			<span class = "boxBorder col col2"></span>
+			<span class = "boxBorder col col1"></span>
+		</div>
+	</div>
+</body>
+</html>
